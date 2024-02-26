@@ -1,3 +1,2 @@
-2024/02/21-21:13:33.687 1928 Reusing MANIFEST C:/Users/Usuario/Documents/GitHub/Contersafio-Launcher/data/Launcher\IndexedDB\file__0.indexeddb.leveldb/MANIFEST-000001
-2024/02/21-21:13:33.688 1928 Recovering log #3
-2024/02/21-21:13:33.688 1928 Reusing old log C:/Users/Usuario/Documents/GitHub/Contersafio-Launcher/data/Launcher\IndexedDB\file__0.indexeddb.leveldb/000003.log 
+2024/02/26-14:58:57.184 3268 Creating DB C:/Users/devhy/OneDrive/Documents/Launchers/Master-Launcher/data/Launcher\IndexedDB\file__0.indexeddb.leveldb since it was missing.
+2024/02/26-14:58:57.191 3268 Reusing MANIFEST C:/Users/devhy/OneDrive/Documents/Launchers/Master-Launcher/data/Launcher\IndexedDB\file__0.indexeddb.leveldb/MANIFEST-000001

@@ -9,6 +9,41 @@
 const fs = require('fs');
 const { Microsoft, Mojang } = require('minecraft-java-core');
 const { ipcRenderer } = require('electron');
+const clientId = '1211151644792856616';
+const DiscordRPC = require('discord-rpc');
+const RPC = new DiscordRPC.Client({ transport: 'ipc'});
+
+async function setActivity() {
+    if (!RPC) return;
+    RPC.setActivity({
+        details: `¡Nuevo Evento!`,
+        state: `Ingresando al servidor`,
+        startTimestamp: Date.now(),
+        largeImageKey: 'https://media.discordapp.net/attachments/1152506206485745745/1211157355031433267/discord.png?ex=65ed2d2f&is=65dab82f&hm=c31a22ebfb128def70e092251764aca4a56b9e8989198b53700638d84ec2d938&=&format=webp&quality=lossless&width=350&height=350',
+        largeImageText: `Master Client`,
+        instance: false,
+        buttons: [
+            {
+                label: `Discord`,
+                url: `https://discord.gg/Rwm7ZaN6kd`,
+            },
+            {
+                label: `Twitch`,
+                url: `https://www.twitch.tv/master62_`,
+            }
+        ]
+    });
+ };
+ 
+RPC.on('ready', async () => {
+    setActivity();
+
+    setInterval(() => {
+        setActivity();
+    }, 86400 * 1000);
+});
+
+RPC.login({ clientId }).catch(err => console.error(err));
 
 import { config, logger, changePanel, database, addAccount, accountSelect } from './utils.js';
 import Login from './panels/login.js';
@@ -45,19 +80,18 @@ class Launcher {
             ipcRenderer.send("main-window-minimize");
         });
 
-        let maximized = false;
-        let maximize = document.querySelector("#maximize")
-        maximize.addEventListener("click", () => {
-            if (maximized) ipcRenderer.send("main-window-maximize")
-            else ipcRenderer.send("main-window-maximize");
-            maximized = !maximized
-            maximize.classList.toggle("icon-maximize")
-            maximize.classList.toggle("icon-restore-down")
-        });
+        // Remove the maximize button
+        let maximizeButton = document.querySelector("#maximize");
+        maximizeButton.parentNode.removeChild(maximizeButton);
 
         document.querySelector("#close").addEventListener("click", () => {
             ipcRenderer.send("main-window-close");
         })
+
+        // Set the window to be unresizable
+        ipcRenderer.send("main-window-set-resizable", false); // Add this line
+
+        
     }
 
     createPanels(...panels) {
@@ -71,7 +105,6 @@ class Launcher {
             new panel().init(this.config, this.news);
         }
     }
-
     async getaccounts() {
         let accounts = await this.database.getAll('accounts');
         let selectaccount = (await this.database.get('1234', 'accounts-selected'))?.value?.selected;

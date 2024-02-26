@@ -1,11 +1,46 @@
 /**
- * @author soyrayku
+ * @author MenakiVT
  * @license CC-BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0
  */
 
 const { app, ipcMain, nativeTheme } = require('electron');
 const { Microsoft } = require('minecraft-java-core');
 const { autoUpdater } = require('electron-updater')
+const clientId = '1211151644792856616';
+const DiscordRPC = require('discord-rpc');
+const RPC = new DiscordRPC.Client({ transport: 'ipc'});
+
+async function setActivity() {
+    if (!RPC) return;
+    RPC.setActivity({
+        details: `¡Nuevo Evento!`,
+        state: `Ingresando al servidor`,
+        startTimestamp: Date.now(),
+        largeImageKey: 'https://raw.githubusercontent.com/MisterHyunDev/Master-Cliente/master/src/assets/images/icon.png',
+        largeImageText: `Master Client`,
+        instance: false,
+        buttons: [
+            {
+                label: `Discord`,
+                url: `https://discord.gg/Rwm7ZaN6kd`,
+            },
+            {
+                label: `Twitch`,
+                url: `https://www.twitch.tv/master62_`,
+            }
+        ]
+    });
+ };
+ 
+RPC.on('ready', async () => {
+    setActivity();
+
+    setInterval(() => {
+        setActivity();
+    }, 86400 * 1000);
+});
+
+RPC.login({ clientId }).catch(err => console.error(err));
 
 const path = require('path');
 const fs = require('fs');
@@ -73,18 +108,17 @@ const pkg = require('../package.json');
 let startedAppTime = Date.now();
 
 ipcMain.on('new-status-discord', async () => {
-    client.login({ clientId: '1197959949557448704' });
+    client.login({ clientId: '1211151644792856616' });
     client.on('ready', () => {
         client.request('SET_ACTIVITY', {
             pid: process.pid,
             activity: {
-                details: 'By: Contersafio Launcher',
+                details: 'By: Master Client',
                 state: 'En el Menú principal',
                 assets: {
-                    large_image: '',
-                    large_text: 'Jugando a contersafio',
+                    large_image: 'https://raw.githubusercontent.com/MisterHyunDev/Master-Cliente/master/src/assets/images/icon.png',
+                    large_text: 'Master Client',
                 },
-                instance: true,
                 timestamps: {
                     start: startedAppTime
                 }
@@ -97,18 +131,17 @@ ipcMain.on('new-status-discord', async () => {
 ipcMain.on('new-status-discord-jugando', async (event, status) => {
     console.log(status)
     if(client) await client.destroy();
-    client.login({ clientId: '1197959949557448704' });
+    client.login({ clientId: '1211151644792856616' });
     client.on('ready', () => {
         client.request('SET_ACTIVITY', {
             pid: process.pid,
             activity: {
-                details: 'By: Luxfiro Cliente',
-                state: 'Jugando',
+                details: 'By: Master Client',
+                state: status,
                 assets: {
-                    large_image: 'logo1',
-                    large_text: 'Luxfiro Studios',
+                    large_image: 'https://raw.githubusercontent.com/MisterHyunDev/Master-Cliente/master/src/assets/images/icon.png',
+                    large_text: 'Master Client',
                 },
-                instance: true,
                 timestamps: {
                     start: startedAppTime
                 }
@@ -120,21 +153,20 @@ ipcMain.on('new-status-discord-jugando', async (event, status) => {
 ipcMain.on('delete-and-new-status-discord', async () => {
     if(client) client.destroy();
     client = new rpc.Client({ transport: 'ipc' });
-    client.login({ clientId: '1197959949557448704' });
+    client.login({ clientId: '1211151644792856616' });
     client.on('ready', () => {
         client.request('SET_ACTIVITY', {
             pid: process.pid,
             activity: {
-                details: 'By: Luxfiro Studios',
+                details: 'By: Master Client',
                 state: 'En el Menú principal',
                 assets: {
-                    large_image: 'logo1',
-                    large_text: 'Luxfiro Studios',
+                    large_image: 'https://raw.githubusercontent.com/MisterHyunDev/Master-Cliente/master/src/assets/images/icon.png',
+                    large_text: 'Master Client',
                 },
-                instance: true,
-                timestamps: {
-                    start: startedAppTime
-                }
+                    timestamps: {
+                        start: startedAppTime
+                    }
             },
         });
     });
